@@ -1,0 +1,203 @@
+[33mcommit fdb5322d70bccd275d1f25b5ecece2edc06e69a9[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/v2[m[33m)[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Fri Oct 17 17:03:20 2025 +0200
+
+    Fix on Key Uri Generator and Segment encoder
+
+[33mcommit 94e3ed8342c9bd44ad04961ac61e7954e808ddc8[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Fri Oct 17 10:29:21 2025 +0200
+
+    Fix on Key Uri Generator
+
+[33mcommit 4538db0fc41c962b40a6e783fe1d7d807833763d[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Thu Oct 16 18:21:08 2025 +0200
+
+    Fix on Key Uri Generator
+
+[33mcommit 692c2d85ac9878c49a5ad5111736accc4717217b[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Thu Oct 16 17:59:08 2025 +0200
+
+    Fix on Key Uri Generator
+
+[33mcommit 57a8b74c27180942725db1a967b95ced013a015e[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Oct 14 17:15:05 2025 +0200
+
+    feat: Implement OpenAPI configuration for service documentation
+
+[33mcommit 775582d8e297970a105d4ecefa140fb804cedc49[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Oct 14 16:47:17 2025 +0200
+
+    feat: Add Eureka client configuration for service discovery
+
+[33mcommit aea47da3460474075e3746cb2fa995f1f0ad7c92[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Oct 14 16:37:57 2025 +0200
+
+    refactor: Update JWT secret configuration for enhanced security and remove unused Eureka properties
+
+[33mcommit 2c954e5cf753647b860db164b0ee5883a49ae8ad[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Oct 14 16:19:22 2025 +0200
+
+    feat: Add Eureka client configuration for service discovery
+
+[33mcommit 2d6969ac1f3b2bd11d664e6e0b92038887573d93[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Oct 14 16:12:12 2025 +0200
+
+    refactor: Remove hardcoded JWT secret from application properties for enhanced security
+
+[33mcommit 7600dbd3dc193aa5485d5fb7bd2f07bd8675133e[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Oct 14 15:32:11 2025 +0200
+
+    App proterties updated
+
+[33mcommit d8fdf8c7a70a857f91ffd92397571fb14ec30f87[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Oct 14 11:38:40 2025 +0200
+
+    refactor: Update API endpoints to include versioning in the URL structure
+
+[33mcommit 89551d9dbba925737535d6f9d7191c99aa2687cc[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Oct 14 10:27:33 2025 +0200
+
+    feat: Add Spring Cloud Netflix Eureka Client dependency for service discovery
+
+[33mcommit 9c97f044d35f3c5bd4f8773ef5bc64a4549e7893[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Wed Sep 24 15:17:14 2025 +0200
+
+    Update
+
+[33mcommit 9728f461c31592878de4dd26149c73348a93e55c[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Wed Sep 3 17:35:11 2025 +0200
+
+    refactor: Remove obsolete environment variable files and update Docker configurations; enhance JobService and controllers for improved resource type handling and content management
+
+[33mcommit ea906c4b40fac87cfbba736d222a68e73f71e3eb[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Wed Sep 3 15:59:08 2025 +0200
+
+    refactor: Enhance job cleanup process to target specific job directories and remove empty parent directories
+
+[33mcommit e7dcda05e5d06ce327bef76d881e03fb316b860f[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Wed Sep 3 14:29:21 2025 +0200
+
+    Refactor code structure for improved readability and maintainability
+
+[33mcommit defa66004fe8b39ea4d7f5c0efaec4ab0bde3728[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Wed Sep 3 12:03:54 2025 +0200
+
+    feat: Enhance job progress tracking with additional metrics in JobService
+
+[33mcommit 669339f3d56c2d8240265a6d0ad83f257ba25b2e[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Wed Sep 3 12:03:46 2025 +0200
+
+    refactor: Remove obsolete Job-related classes to streamline codebase
+
+[33mcommit b6a49ea4001339c5959f064575ea1753d585960a[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Wed Sep 3 01:55:06 2025 +0200
+
+    Refactor JobController and ProxyController to use job ID instead of slug for playlist operations; remove PlaylistController; enhance UploadController documentation for job ID architecture; update StatusController to retrieve jobs by slug; modify frontend to support job ID input and display; improve HTML structure and styling for clarity.
+
+[33mcommit a639e9fc00c70b8154098811ce62ac76ca033301[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Wed Sep 3 01:16:27 2025 +0200
+
+    Update
+
+[33mcommit 313b4001594b24c61d5716a77ed3f2b8708f4a23[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Sep 2 18:55:13 2025 +0200
+
+    feat: Implement FFmpeg and Playlist Helpers for video processing
+    
+    - Added FFmpegHelper class for managing FFmpeg commands, checking stream availability, and extracting video metadata.
+    - Introduced PlaylistHelper class for generating master and audio playlists, validating playlist structure, and counting segments.
+    - Created ProcessHelper class to handle FFmpeg process execution, monitoring progress, and managing running processes.
+    - Developed JobProgressDto for tracking job progress, including segment counts, elapsed time, and variant information.
+    - Enhanced error handling and logging throughout the new classes for better debugging and monitoring.
+
+[33mcommit 6b772c3684aa972ee36a679280b61a3a579df2f3[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Sep 2 18:55:04 2025 +0200
+
+    feat: Implement Job and JobStatus classes, and add initial structure for CleanDirectory and HomeController , And AES ENCRYPTION
+
+[33mcommit 55e08542fddf3030f64121e0b2238a7d61299401[m
+Merge: 5a01358 70a3fb3
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Sep 2 10:37:25 2025 +0200
+
+    Merge branch 'v2' of https://github.com/XKS-MTV/m3u8-encoder-service into v2
+
+[33mcommit 5a01358314e9fe4056d9eb9d4ab459c658549f34[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Tue Sep 2 10:35:16 2025 +0200
+
+    git ignore update
+
+[33mcommit 70a3fb34dc42d9eadfbeb509d3b2e7ecd104f8ce[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Mon Sep 1 18:28:12 2025 +0200
+
+    Update
+
+[33mcommit 1a430c2f408fb045d413cb89a3c51a5a6194d5f9[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Mon Sep 1 13:18:13 2025 +0200
+
+    Update
+
+[33mcommit 614acb0a4d268c76f0faf2d46c5c30c65f13de76[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Mon Sep 1 13:18:12 2025 +0200
+
+    feat: Add R2StorageHelper class for storage operations
+
+[33mcommit f05e6146662007fece7d8a18d4a21063a52c357b[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Mon Sep 1 10:38:39 2025 +0200
+
+    feat: Add comprehensive README documentation for M3U8 Encoder V2
+
+[33mcommit 82c548159cb5d65e9ea4dde570b5530a4d3d4045[m
+Author: ousseynoukone <ousseynou781227@gmail.com>
+Date:   Mon Sep 1 10:32:20 2025 +0200
+
+    feat: Implement Token Service for JWT generation and validation
+    
+    - Added TokenService class to handle JWT token generation and validation.
+    - Implemented methods for generating tokens with static and dynamic expiration.
+    - Included logging for token generation and validation processes.
+    
+    feat: Create PlaylistController for serving HLS playlists
+    
+    - Added PlaylistController to serve master playlists with presigned variant URLs.
+    - Integrated AWS S3 presigner for generating temporary access URLs.
+    - Implemented endpoint for fetching master playlists based on slug.
+    
+    feat: Develop ProxyController for secure HLS streaming
+    
+    - Introduced ProxyController to handle token-based secure HLS streaming.
+    - Implemented endpoints for fetching master and variant playlists with token validation.
+    - Added logic to rewrite playlist URLs to include tokenized proxy URLs.
+    
+    feat: Add StatusController for upload and segment status
+    
+    - Created StatusController to provide overall status for a given slug.
+    - Implemented endpoint to return counts of segments based on their upload status.
+    
+    feat: Implement UploadContr
