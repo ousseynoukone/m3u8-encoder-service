@@ -160,10 +160,7 @@ https://r2-presigned-url-for-720p-playlist
 ### Resource Types
 
 The API supports different content categories:
-- `MOVIE` - Feature films
-- `PODCAST` - Audio podcasts  
-- `SERIES` - TV series episodes
-- `REPLAY` - Live stream replays
+- `AUDIO` - General audio content
 - `VIDEO` - General video content
 
 ## 🏗️ Architecture

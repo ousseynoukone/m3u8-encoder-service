@@ -601,9 +601,9 @@ public class R2StorageService {
         throw new Exception("Failed to upload after " + maxRetryAttempts + " attempts: " + key, lastException);
     }
 
-    private String saveToDatabase(String title, String fileSlug, String resourceType, String masterUrl,
-                                  String masterKey, List<VariantInfo> variants, List<VariantSegment> segments,
-                                  Long durationSeconds) throws Exception {
+    private void saveToDatabase(String title, String fileSlug, String resourceType, String masterUrl,
+                                String masterKey, List<VariantInfo> variants, List<VariantSegment> segments,
+                                Long durationSeconds) throws Exception {
 
         // Extract jobId from masterKey (format: resourceType/slug/jobId/master.m3u8)
         String jobId = null;
@@ -638,7 +638,6 @@ public class R2StorageService {
             segmentRepo.saveAll(segments);
         }
 
-        return masterId;
     }
 
     private String buildBaseUrl() {

@@ -19,7 +19,7 @@ public class UploadProgressHelper {
 
     private final EventService eventService;
     private JobService jobService;
-    
+
     // Throttling: Track last SSE update time per job (3 seconds minimum)
     private final ConcurrentHashMap<String, LocalDateTime> lastSseUpdate = new ConcurrentHashMap<>();
     private static final int SSE_THROTTLE_SECONDS = 3;
@@ -69,7 +69,7 @@ public class UploadProgressHelper {
     }
 
     /**
-     * Update segment counts with smart SSE throttling (max once every 3 seconds)
+     *  Segment counts with smart SSE throttling (max once every 3 seconds)
      */
     public void updateSegmentCounts(String jobId, int total, int completed, int failed, int uploading, int pending) {
         if (jobId == null || jobService == null) {
@@ -94,7 +94,7 @@ public class UploadProgressHelper {
     }
 
     /**
-     * Force immediate SSE update (bypasses throttling)
+     * Immediate SSE update
      */
     public void updateSegmentCountsImmediate(String jobId, int total, int completed, int failed, int uploading, int pending) {
         if (jobId == null || jobService == null) {
@@ -117,19 +117,13 @@ public class UploadProgressHelper {
     private boolean shouldSendSSE(String jobId) {
         LocalDateTime lastUpdate = lastSseUpdate.get(jobId);
         if (lastUpdate == null) {
-            return true; // First update
+            return true;
         }
         
         LocalDateTime now = LocalDateTime.now();
         return java.time.Duration.between(lastUpdate, now).getSeconds() >= SSE_THROTTLE_SECONDS;
     }
 
-    /**
-     * Update progress for major upload phases
-     */
-    public void updateUploadPhase(String jobId, String message, int percentage) {
-        updateUploadProgress(jobId, message, percentage);
-    }
 
     /**
      * Update progress for variant upload start
@@ -139,12 +133,6 @@ public class UploadProgressHelper {
         updateUploadProgress(jobId, message, 0);
     }
 
-    /**
-     * Update progress for upload completion
-     */
-    public void updateUploadCompletion(String jobId) {
-        updateUploadProgress(jobId, "Téléchargement terminé avec succès !", 100);
-    }
 
     /**
      * Update progress for upload error
