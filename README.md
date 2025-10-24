@@ -315,5 +315,3 @@ docker-compose restart mongo
 - 💬 [Discussions](https://github.com/yourusername/m3u8-encoder-v2/discussions)
 
 ---
-
-**Built with ❤️ by XKS Group**
