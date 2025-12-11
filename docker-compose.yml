@@ -1,0 +1,56 @@
+services:
+  m3u8-encoder:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      # Override MongoDB URI for Docker
+      MONGODB_URI: mongodb://mongo:27017/m3u8
+    volumes:
+      - uploads_data:/tmp/uploads
+      - processing_data:/tmp/processing
+    depends_on:
+      - mongo
+    networks:
+      - m3u8-network
+
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: m3u8
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - m3u8-network
+
+  mongo-express:
+    image: mongo-express:1.0.2-20
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      ME_CONFIG_BASICAUTH: "false"
+    depends_on:
+      - mongo
+    networks:
+      - m3u8-network
+
+volumes:
+  mongo_data:
+  uploads_data:
+  processing_data:
+
+networks:
+  m3u8-network:
+    driver: bridge
+
+

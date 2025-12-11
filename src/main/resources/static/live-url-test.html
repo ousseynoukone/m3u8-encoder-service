@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live URL HLS Proxy Test - External Stream Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 300;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .info-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-section h2 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .info-section p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .info-section .highlight {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ffd700;
+            font-weight: 500;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        label {
+            font-weight: 500;
+            min-width: 140px;
+            color: #e0e0e0;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .play-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .create-btn {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+            min-width: 140px;
+        }
+
+        .create-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.4);
+        }
+
+        .clear-btn {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+            min-width: 100px;
+        }
+
+        .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(244, 67, 54, 0.4);
+        }
+
+        .video-container {
+            margin-top: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            background: #000;
+            position: relative;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 70vh;
+        }
+
+        .video-info {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #e0e0e0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .status {
+            padding: 10px 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .status.loading {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            color: #ffc107;
+        }
+
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            color: #f44336;
+        }
+
+        .status.success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            color: #4CAF50;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .url-list {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .url-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .url-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .url-item .url-id {
+            font-weight: 600;
+            color: #ffd700;
+        }
+
+        .url-item .url-value {
+            flex: 1;
+            margin: 0 10px;
+            color: #e0e0e0;
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .delete-btn {
+            background: rgba(244, 67, 54, 0.3);
+            color: #f44336;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .delete-btn:hover {
+            background: rgba(244, 67, 54, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            label {
+                min-width: auto;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🔴 Live URL HLS Proxy Test</h1>
+
+    <div class="info-section">
+        <h2>🎬 External HLS Stream Proxy</h2>
+        <p>
+            Test proxied HLS streams from external URLs. The proxy automatically detects and handles both 
+            <span class="highlight">master playlists</span> and <span class="highlight">variant/index playlists</span>.
+        </p>
+        <p>
+            <strong>Start Manifest:</strong> /m3u8-encoder/api/v2/live-url/proxy/{urlId}
+        </p>
+        <p>
+            <strong>Segments/Keys:</strong> /m3u8-encoder/api/v2/live-url/proxy/segment?u=&lt;encoded-absolute-url&gt;
+        </p>
+    </div>
+
+    <div class="input-section">
+        <div class="input-group">
+            <label for="urlIdInput">URL ID:</label>
+            <input
+                    type="text"
+                    id="urlIdInput"
+                    placeholder="Enter URL ID (e.g., my-stream-001)"
+                    autocomplete="off"
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="externalUrlInput">External URL (for create):</label>
+            <input
+                    type="text"
+                    id="externalUrlInput"
+                    placeholder="https://example.com/live/master.m3u8"
+                    autocomplete="off"
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="serverInput">Server URL:</label>
+            <input
+                    type="text"
+                    id="serverInput"
+                    placeholder="Server URL (default: http://localhost:8080)"
+                    value="http://localhost:8080"
+                    autocomplete="off"
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="bearerTokenInput">Bearer Token (optional):</label>
+            <input
+                    type="password"
+                    id="bearerTokenInput"
+                    placeholder="Enter Bearer token (optional)"
+                    autocomplete="off"
+            >
+        </div>
+
+        <div class="button-group">
+            <button class="play-btn" id="playBtn">▶️ Load & Play</button>
+            <button class="create-btn" id="createBtn">➕ Create LiveUrl</button>
+            <button class="clear-btn" id="clearBtn">🗑️ Clear</button>
+        </div>
+
+        <div class="url-list hidden" id="urlList">
+            <h3 style="margin-bottom: 10px; color: #ffd700;">Existing LiveUrls:</h3>
+            <div id="urlItems"></div>
+        </div>
+    </div>
+
+    <div id="status" class="status hidden"></div>
+
+    <div id="videoContainer" class="video-container hidden">
+        <video id="videoPlayer" controls preload="metadata">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-info">
+            <span id="videoUrl"></span>
+            <span id="videoStatus"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    class LiveUrlPlayer {
+        constructor() {
+            this.video = document.getElementById('videoPlayer');
+            this.urlIdInput = document.getElementById('urlIdInput');
+            this.externalUrlInput = document.getElementById('externalUrlInput');
+            this.serverInput = document.getElementById('serverInput');
+            this.bearerTokenInput = document.getElementById('bearerTokenInput');
+            this.playBtn = document.getElementById('playBtn');
+            this.createBtn = document.getElementById('createBtn');
+            this.clearBtn = document.getElementById('clearBtn');
+            this.status = document.getElementById('status');
+            this.videoContainer = document.getElementById('videoContainer');
+            this.videoUrl = document.getElementById('videoUrl');
+            this.videoStatus = document.getElementById('videoStatus');
+            this.urlList = document.getElementById('urlList');
+            this.urlItems = document.getElementById('urlItems');
+            this.hls = null;
+
+            this.initializeEventListeners();
+            this.loadFromStorage();
+            this.loadExistingUrls();
+        }
+
+        initializeEventListeners() {
+            this.playBtn.addEventListener('click', () => this.loadVideo());
+            this.createBtn.addEventListener('click', () => this.createLiveUrl());
+            this.clearBtn.addEventListener('click', () => this.clearAll());
+
+            [this.urlIdInput, this.externalUrlInput, this.serverInput, this.bearerTokenInput].forEach(input => {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        if (input === this.externalUrlInput) {
+                            this.createLiveUrl();
+                        } else {
+                            this.loadVideo();
+                        }
+                    }
+                });
+                input.addEventListener('input', () => this.saveToStorage());
+            });
+
+            this.video.addEventListener('loadstart', () => this.updateVideoStatus('Loading...'));
+            this.video.addEventListener('loadedmetadata', () => {
+                this.updateVideoStatus(`${this.video.videoWidth}x${this.video.videoHeight}`);
+            });
+            this.video.addEventListener('error', () => {
+                this.showStatus('Video playback error occurred', 'error');
+                this.updateVideoStatus('Error');
+            });
+            this.video.addEventListener('waiting', () => this.updateVideoStatus('Buffering...'));
+            this.video.addEventListener('playing', () => this.updateVideoStatus('Playing'));
+            this.video.addEventListener('pause', () => this.updateVideoStatus('Paused'));
+        }
+
+        getHeaders(contentType = 'application/json') {
+            const headers = {
+                'Content-Type': contentType
+            };
+            const token = this.bearerTokenInput.value.trim();
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            return headers;
+        }
+
+        saveToStorage() {
+            localStorage.setItem('live-url-player-urlid', this.urlIdInput.value);
+            localStorage.setItem('live-url-player-server', this.serverInput.value);
+            localStorage.setItem('live-url-player-external', this.externalUrlInput.value);
+            localStorage.setItem('live-url-player-token', this.bearerTokenInput.value);
+        }
+
+        loadFromStorage() {
+            this.urlIdInput.value = localStorage.getItem('live-url-player-urlid') || '';
+            this.serverInput.value = localStorage.getItem('live-url-player-server') || 'http://localhost:8080';
+            this.externalUrlInput.value = localStorage.getItem('live-url-player-external') || '';
+            this.bearerTokenInput.value = localStorage.getItem('live-url-player-token') || '';
+        }
+
+        async loadExistingUrls() {
+            const serverUrl = this.serverInput.value.trim();
+            if (!serverUrl) return;
+
+            try {
+                const response = await fetch(`${serverUrl}/m3u8-encoder/api/v2/live-url`, {
+                    headers: this.getHeaders()
+                });
+                if (!response.ok) return;
+
+                const urls = await response.json();
+                if (urls.length > 0) {
+                    this.urlList.classList.remove('hidden');
+                    this.urlItems.innerHTML = '';
+                    
+                    urls.forEach(url => {
+                        const item = document.createElement('div');
+                        item.className = 'url-item';
+                        item.innerHTML = `
+                            <span class="url-id">${url.urlId}</span>
+                            <span class="url-value">${url.url}</span>
+                            <button class="delete-btn" onclick="player.deleteLiveUrl('${url.urlId}')">Delete</button>
+                            <button style="background: rgba(76, 175, 80, 0.3); color: #4CAF50; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 12px; margin-left: 5px;" 
+                                    onclick="player.selectUrl('${url.urlId}')">Select</button>
+                        `;
+                        this.urlItems.appendChild(item);
+                    });
+                } else {
+                    this.urlList.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('Failed to load URLs:', error);
+            }
+        }
+
+        selectUrl(urlId) {
+            this.urlIdInput.value = urlId;
+            this.showStatus('URL ID selected', 'success');
+        }
+
+        async deleteLiveUrl(urlId) {
+            if (!confirm(`Delete LiveUrl "${urlId}"?`)) return;
+
+            const serverUrl = this.serverInput.value.trim();
+            try {
+                const response = await fetch(`${serverUrl}/m3u8-encoder/api/v2/live-url/${urlId}`, {
+                    method: 'DELETE',
+                    headers: this.getHeaders()
+                });
+
+                if (response.ok) {
+                    this.showStatus(`LiveUrl "${urlId}" deleted`, 'success');
+                    this.loadExistingUrls();
+                    if (this.urlIdInput.value === urlId) {
+                        this.urlIdInput.value = '';
+                    }
+                } else {
+                    this.showStatus(`Failed to delete: ${response.statusText}`, 'error');
+                }
+            } catch (error) {
+                this.showStatus(`Error deleting: ${error.message}`, 'error');
+            }
+        }
+
+        async createLiveUrl() {
+            const serverUrl = this.serverInput.value.trim();
+            const urlId = this.urlIdInput.value.trim();
+            const externalUrl = this.externalUrlInput.value.trim();
+
+            if (!serverUrl) {
+                this.showStatus('Please enter a server URL', 'error');
+                return;
+            }
+
+            if (!urlId) {
+                this.showStatus('Please enter a URL ID', 'error');
+                this.urlIdInput.focus();
+                return;
+            }
+
+            if (!externalUrl) {
+                this.showStatus('Please enter an external URL', 'error');
+                this.externalUrlInput.focus();
+                return;
+            }
+
+            this.createBtn.disabled = true;
+            this.showStatus('Creating LiveUrl...', 'loading');
+
+            try {
+                const response = await fetch(`${serverUrl}/m3u8-encoder/api/v2/live-url`, {
+                    method: 'POST',
+                    headers: this.getHeaders('application/json'),
+                    body: JSON.stringify({
+                        urlId: urlId,
+                        url: externalUrl
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.text();
+                    throw new Error(error || `HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+                this.showStatus(`LiveUrl "${urlId}" created successfully!`, 'success');
+                this.loadExistingUrls();
+                this.createBtn.disabled = false;
+            } catch (error) {
+                console.error('Error creating LiveUrl:', error);
+                this.showStatus(`Failed to create: ${error.message}`, 'error');
+                this.createBtn.disabled = false;
+            }
+        }
+
+        async loadVideo() {
+            const serverUrl = this.serverInput.value.trim();
+            const urlId = this.urlIdInput.value.trim();
+
+            if (!serverUrl) {
+                this.showStatus('Please enter a server URL', 'error');
+                return;
+            }
+
+            if (!urlId) {
+                this.showStatus('Please enter a URL ID', 'error');
+                this.urlIdInput.focus();
+                return;
+            }
+
+            const manifestUrl = `${serverUrl}/m3u8-encoder/api/v2/live-url/proxy/${urlId}`;
+
+            this.showStatus('Loading M3U8 manifest...', 'loading');
+            this.playBtn.disabled = true;
+
+            try {
+                const headers = this.getHeaders();
+                const response = await fetch(manifestUrl, {
+                    headers: headers
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                this.loadHLSVideo(manifestUrl);
+
+            } catch (error) {
+                console.error('Error loading manifest:', error);
+                this.showStatus(`Failed to load manifest: ${error.message}`, 'error');
+                this.playBtn.disabled = false;
+            }
+        }
+
+        loadHLSVideo(url) {
+            if (this.hls) {
+                this.hls.destroy();
+                this.hls = null;
+            }
+
+            this.videoUrl.textContent = url;
+            this.updateVideoStatus('Initializing...');
+
+            if (Hls.isSupported()) {
+                const token = this.bearerTokenInput.value.trim();
+                const hlsConfig = {
+                    debug: false,
+                    enableWorker: true,
+                    lowLatencyMode: false,
+                    backBufferLength: 90,
+                    maxBufferSize: 60 * 1000 * 1000,
+                    maxBufferLength: 30,
+                    maxMaxBufferLength: 600,
+                    xhrSetup: (xhr, url) => {
+                        // Include Bearer token in all HLS requests if provided
+                        if (token) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        }
+                    }
+                };
+
+                this.hls = new Hls(hlsConfig);
+                this.hls.loadSource(url);
+                this.hls.attachMedia(this.video);
+
+                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    this.showStatus('Manifest loaded successfully! Ready to play.', 'success');
+                    this.videoContainer.classList.remove('hidden');
+                    this.playBtn.disabled = false;
+                    this.video.play().catch(e => console.log('Auto-play prevented:', e.message));
+                });
+
+                this.hls.on(Hls.Events.ERROR, (event, data) => {
+                    if (data.fatal) {
+                        const msg = data.type === Hls.ErrorTypes.NETWORK_ERROR
+                            ? 'Network error: Unable to load video'
+                            : 'Error loading video';
+                        this.showStatus(msg, 'error');
+                        this.playBtn.disabled = false;
+                    }
+                });
+
+            } else if (this.video.canPlayType('application/vnd.apple.mpegurl')) {
+                this.video.src = url;
+                this.video.addEventListener('loadedmetadata', () => {
+                    this.showStatus('Manifest loaded successfully!', 'success');
+                    this.videoContainer.classList.remove('hidden');
+                    this.playBtn.disabled = false;
+                });
+                this.video.addEventListener('error', () => {
+                    this.showStatus('Error loading video', 'error');
+                    this.playBtn.disabled = false;
+                });
+            } else {
+                this.showStatus('HLS is not supported in this browser', 'error');
+                this.playBtn.disabled = false;
+            }
+        }
+
+        clearAll() {
+            this.urlIdInput.value = '';
+            this.externalUrlInput.value = '';
+            this.serverInput.value = 'http://localhost:8080';
+
+            localStorage.removeItem('live-url-player-urlid');
+            localStorage.removeItem('live-url-player-server');
+            localStorage.removeItem('live-url-player-external');
+
+            this.videoContainer.classList.add('hidden');
+            this.status.classList.add('hidden');
+
+            this.video.pause();
+            this.video.src = '';
+
+            if (this.hls) {
+                this.hls.destroy();
+                this.hls = null;
+            }
+
+            this.playBtn.disabled = false;
+        }
+
+        showStatus(message, type) {
+            this.status.textContent = message;
+            this.status.className = `status ${type}`;
+            this.status.classList.remove('hidden');
+        }
+
+        updateVideoStatus(status) {
+            this.videoStatus.textContent = status;
+        }
+    }
+
+    let player;
+    document.addEventListener('DOMContentLoaded', () => {
+        player = new LiveUrlPlayer();
+    });
+</script>
+</body>
+</html>
+
+
