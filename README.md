@@ -615,4 +615,4 @@ eventSource.onerror = (error) => {
 
 ---
 
-**Construit avec ❤️ par XKS Group**
+**Construit avec ❤️ par Ousseynou Kone**
